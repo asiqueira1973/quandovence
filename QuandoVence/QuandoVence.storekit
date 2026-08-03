@@ -1,0 +1,29 @@
+{
+  "identifier" : "QUANDOVENCE-STOREKIT-CONFIG",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "19.90",
+      "familyShareable" : false,
+      "internalID" : "QUANDOVENCE-DESBLOQUEIO",
+      "localizations" : [
+        {
+          "description" : "Desbloqueie o cadastro de documentos ilimitados com um pagamento único, sem assinatura.",
+          "displayName" : "Documentos ilimitados",
+          "locale" : "pt_BR"
+        }
+      ],
+      "productID" : "quandovence_desbloqueio_completo",
+      "referenceName" : "Desbloqueio completo (compra única)",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

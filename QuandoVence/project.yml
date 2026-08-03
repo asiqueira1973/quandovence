@@ -1,0 +1,79 @@
+# project.yml — fonte de verdade do projeto Xcode (gerado via `xcodegen generate`).
+# O .xcodeproj é derivado deste arquivo (mesmo padrão do Estante/Leitor.md/Hora do
+# Remédio — spec seção 4/18). App "Quando Vence?": lembrete de vencimento de
+# documentos pessoais, local-first, 100% offline (spec 0.1).
+#
+# Codinome técnico do target/pasta/bundle: "QuandoVence".
+name: QuandoVence
+
+options:
+  bundleIdPrefix: com.dablab              # prefixo confirmado, mesmo do Estante (spec 4/25)
+  deploymentTarget:
+    iOS: "26.0"                           # SDK mínimo p/ submissão a partir de 28/abr/2026 (spec 4)
+  developmentLanguage: pt-BR              # idioma único do MVP (spec 17)
+  createIntermediateGroups: true
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: XGZW6Y6K25          # team de assinatura reaproveitado (spec 4/25)
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    # #Predicate do SwiftData gera warnings de concorrência (código da Apple);
+    # mantém em minimal, mesmo racional do Estante.
+    SWIFT_STRICT_CONCURRENCY: minimal
+
+targets:
+  # ---------------------------------------------------------------------------
+  # App principal (SwiftUI + SwiftData). Local-first, sem CloudKit no MVP (spec 4).
+  # Somente iPhone — decisão explícita, diferente do Estante (spec 3/4/17).
+  # ---------------------------------------------------------------------------
+  QuandoVence:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dablab.quandovence
+        INFOPLIST_FILE: Sources/App/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1"        # SOMENTE iPhone (spec 3/4/17)
+        SUPPORTS_MACCATALYST: NO           # iOS-only (spec 3)
+
+  # ---------------------------------------------------------------------------
+  # Testes unitários — lógica pura de cálculo/regra (spec 22).
+  # ---------------------------------------------------------------------------
+  QuandoVenceTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: QuandoVenceTests
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dablab.quandovence.tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: QuandoVence
+
+schemes:
+  QuandoVence:
+    build:
+      targets:
+        QuandoVence: all
+        QuandoVenceTests: [test]
+    run:
+      config: Debug
+      # StoreKit config local para testar o Paywall/compra em sandbox (spec 8.8/27).
+      storeKitConfiguration: QuandoVence.storekit
+    test:
+      config: Debug
+      targets:
+        - QuandoVenceTests

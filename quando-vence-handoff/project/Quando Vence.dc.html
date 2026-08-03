@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { margin:0; background:#E9E9EC; font-family:-apple-system,"SF Pro Text",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  * { box-sizing:border-box; }
+  a { color:#1C1C1E; } a:hover { color:#000; }
+  input, button { font-family:inherit; }
+  input:focus { outline:none; }
+  ::-webkit-scrollbar { width:0; }
+</style>
+</helmet>
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+    <div style="height:100%; display:flex; flex-direction:column; background:#F5F5F7;">
+      <div style="padding:58px 20px 12px; display:flex; align-items:flex-end; justify-content:space-between;">
+        <div>
+          <div style="font-size:30px; font-weight:700; letter-spacing:-0.6px; color:#1C1C1E;">Quando Vence?</div>
+          <div style="font-size:14px; color:#6E6E73; margin-top:3px;">{{ summary }}</div>
+        </div>
+        <div onClick="{{ goSettings }}" style="width:44px; height:44px; margin-right:-10px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6E6E73;">{{ gearIcon }}</div>
+      </div>
+
+      <div style="flex:1; overflow:auto; padding:8px 20px 16px;">
+        <sc-if value="{{ hasOverdue }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:8px 4px 8px;">Vencidos</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ overdue }}" as="d" hint-placeholder-count="1">
+              <div onClick="{{ d.open }}" style="display:flex; align-items:stretch; background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.07), 0 4px 14px rgba(0,0,0,0.04); overflow:hidden; cursor:pointer; min-height:74px;">
+                <div style="width:4px; background:{{ d.color }};"></div>
+                <div style="flex:1; padding:14px 16px; display:flex; align-items:center; gap:12px;">
+                  <div style="width:20px; display:flex; align-items:center; justify-content:center;">{{ d.icon }}</div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:16px; font-weight:600; color:#1C1C1E; letter-spacing:-0.2px;">{{ d.name }}</div>
+                    <div style="font-size:13px; color:#6E6E73; margin-top:2px;">{{ d.dateLabel }}</div>
+                  </div>
+                  <div style="font-size:13px; font-weight:600; color:{{ d.color }}; text-align:right; max-width:96px;">{{ d.statusLabel }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasSoon }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:22px 4px 8px;">Vence em breve</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ soon }}" as="d" hint-placeholder-count="2">
+              <div onClick="{{ d.open }}" style="display:flex; align-items:stretch; background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.07), 0 4px 14px rgba(0,0,0,0.04); overflow:hidden; cursor:pointer; min-height:74px;">
+                <div style="width:4px; background:{{ d.color }};"></div>
+                <div style="flex:1; padding:14px 16px; display:flex; align-items:center; gap:12px;">
+                  <div style="width:20px; display:flex; align-items:center; justify-content:center;">{{ d.icon }}</div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:16px; font-weight:600; color:#1C1C1E; letter-spacing:-0.2px;">{{ d.name }}</div>
+                    <div style="font-size:13px; color:#6E6E73; margin-top:2px;">{{ d.dateLabel }}</div>
+                  </div>
+                  <div style="font-size:13px; font-weight:600; color:{{ d.color }}; text-align:right; max-width:96px;">{{ d.statusLabel }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasOk }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:22px 4px 8px;">Em dia</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ ok }}" as="d" hint-placeholder-count="4">
+              <div onClick="{{ d.open }}" style="display:flex; align-items:stretch; background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06), 0 4px 14px rgba(0,0,0,0.03); overflow:hidden; cursor:pointer; min-height:74px;">
+                <div style="width:4px; background:{{ d.color }};"></div>
+                <div style="flex:1; padding:14px 16px; display:flex; align-items:center; gap:12px;">
+                  <div style="width:20px; display:flex; align-items:center; justify-content:center;">{{ d.icon }}</div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:16px; font-weight:600; color:#1C1C1E; letter-spacing:-0.2px;">{{ d.name }}</div>
+                    <div style="font-size:13px; color:#6E6E73; margin-top:2px;">{{ d.dateLabel }}</div>
+                  </div>
+                  <div style="font-size:13px; font-weight:500; color:#8E8E93; text-align:right; max-width:96px;">{{ d.statusLabel }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="padding:12px 20px 42px; background:rgba(245,245,247,0.92); border-top:1px solid #E5E5EA;">
+        <div onClick="{{ goAdd }}" style="height:52px; border-radius:14px; background:#1C1C1E; color:#FFFFFF; font-size:17px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;" style-hover="background:#000;">
+          <span style="font-size:21px; font-weight:400; line-height:0; margin-top:-2px;">+</span>
+          <span>Adicionar documento</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+    <div style="height:100%; display:flex; flex-direction:column; background:#F5F5F7;">
+      <div style="padding:54px 12px 10px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #E5E5EA; background:#F5F5F7;">
+        <div onClick="{{ goList }}" style="min-height:44px; display:flex; align-items:center; gap:2px; padding:0 8px; cursor:pointer; color:#007AFF; font-size:17px;">
+          <span style="font-size:24px; font-weight:300; margin-top:-2px;">‹</span><span>Documentos</span>
+        </div>
+        <div onClick="{{ goEdit }}" style="min-height:44px; display:flex; align-items:center; padding:0 10px; cursor:pointer; color:#007AFF; font-size:17px;">Editar</div>
+      </div>
+
+      <div style="flex:1; overflow:auto; padding:24px 20px 40px;">
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; color:{{ cur.color }};">{{ cur.categoryLabel }}</div>
+        <div style="font-size:28px; font-weight:700; letter-spacing:-0.5px; color:#1C1C1E; margin-top:6px; text-wrap:pretty;">{{ cur.name }}</div>
+
+        <div style="margin-top:20px; background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.07), 0 4px 14px rgba(0,0,0,0.04); padding:22px; display:flex; align-items:baseline; gap:10px; border-left:4px solid {{ cur.color }};">
+          <div style="font-size:44px; font-weight:700; letter-spacing:-1.4px; color:#1C1C1E; line-height:1;">{{ cur.bigNumber }}</div>
+          <div style="font-size:15px; color:#6E6E73; line-height:1.3;">{{ cur.bigCaption }}</div>
+        </div>
+
+        <div style="margin-top:14px; background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06), 0 4px 14px rgba(0,0,0,0.03); overflow:hidden;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 18px; border-bottom:1px solid #F0F0F2; gap:16px;">
+            <div style="font-size:15px; color:#6E6E73;">Vencimento</div>
+            <div style="font-size:15px; font-weight:600; color:#1C1C1E; text-align:right;">{{ cur.longDate }}</div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 18px; border-bottom:1px solid #F0F0F2; gap:16px;">
+            <div style="font-size:15px; color:#6E6E73;">Categoria</div>
+            <div style="font-size:15px; font-weight:600; color:#1C1C1E; text-align:right;">{{ cur.categoryLabel }}</div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 18px; gap:16px;">
+            <div style="font-size:15px; color:#6E6E73;">Avisos</div>
+            <div style="font-size:15px; font-weight:600; color:#1C1C1E; text-align:right;">{{ alertsLabel }}</div>
+          </div>
+        </div>
+
+        <sc-if value="{{ cur.photo }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:14px; background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06); overflow:hidden;">
+            <div style="height:170px; background:#DCDCE1; display:flex; align-items:center; justify-content:center; color:#9A9AA0; font-size:13px; letter-spacing:0.2px;">Foto do documento</div>
+          </div>
+        </sc-if>
+
+        <div onClick="{{ removeDoc }}" style="margin-top:26px; min-height:50px; border-radius:12px; background:#FFFFFF; box-shadow:0 1px 2px rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; color:#C0362B; font-size:16px; font-weight:500; cursor:pointer;">Excluir documento</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isForm }}" hint-placeholder-val="{{ false }}">
+    <div style="height:100%; display:flex; flex-direction:column; background:#F5F5F7;">
+      <div style="padding:54px 12px 10px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #E5E5EA;">
+        <div onClick="{{ cancelForm }}" style="min-height:44px; display:flex; align-items:center; padding:0 10px; cursor:pointer; color:#007AFF; font-size:17px;">Cancelar</div>
+        <div style="font-size:17px; font-weight:600; color:#1C1C1E;">{{ formTitle }}</div>
+        <div style="width:78px;"></div>
+      </div>
+
+      <div style="flex:1; overflow:auto; padding:22px 20px 24px;">
+        <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:0 4px 8px;">Documento</div>
+        <div style="background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06); padding:4px 16px;">
+          <input value="{{ form.name }}" onChange="{{ onName }}" placeholder="Nome do documento" style="width:100%; border:none; padding:14px 0; font-size:16px; color:#1C1C1E; background:transparent;" />
+        </div>
+
+        <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:22px 4px 8px;">Categoria</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <sc-for list="{{ categoryChips }}" as="c" hint-placeholder-count="5">
+            <div onClick="{{ c.select }}" style="min-height:44px; padding:0 16px; border-radius:11px; display:flex; align-items:center; gap:7px; cursor:pointer; font-size:15px; font-weight:500; background:{{ c.bg }}; color:{{ c.fg }}; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+              <span style="display:flex;">{{ c.icon }}</span><span>{{ c.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:22px 4px 8px;">Vencimento</div>
+        <div style="background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06); padding:14px 12px 16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:0 4px 10px;">
+            <div onClick="{{ prevMonth }}" style="width:44px; height:38px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#007AFF; font-size:22px; font-weight:300;">‹</div>
+            <div style="font-size:16px; font-weight:600; color:#1C1C1E;">{{ monthLabel }}</div>
+            <div onClick="{{ nextMonth }}" style="width:44px; height:38px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#007AFF; font-size:22px; font-weight:300;">›</div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:2px; padding-bottom:4px;">
+            <sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7">
+              <div style="text-align:center; font-size:11px; font-weight:600; color:#A1A1A6; letter-spacing:0.4px;">{{ w }}</div>
+            </sc-for>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:2px;">
+            <sc-for list="{{ calendarDays }}" as="day" hint-placeholder-count="35">
+              <div onClick="{{ day.select }}" style="height:42px; display:flex; align-items:center; justify-content:center; cursor:{{ day.cursor }};">
+                <div style="width:36px; height:36px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:{{ day.weight }}; background:{{ day.bg }}; color:{{ day.fg }};">{{ day.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-top:1px solid #F0F0F2; margin-top:10px; padding:12px 4px 0; display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:14px; color:#6E6E73;">Selecionado</div>
+            <div style="font-size:15px; font-weight:600; color:#1C1C1E;">{{ selectedDateLabel }}</div>
+          </div>
+        </div>
+
+        <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:22px 4px 8px;">Foto (opcional)</div>
+        <div onClick="{{ togglePhoto }}" style="background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06); min-height:56px; display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer;">
+          <div style="width:44px; height:44px; border-radius:9px; background:#F0F0F3; display:flex; align-items:center; justify-content:center; color:#8E8E93;">{{ cameraIcon }}</div>
+          <div style="flex:1;">
+            <div style="font-size:16px; color:#1C1C1E;">{{ photoLabel }}</div>
+            <div style="font-size:13px; color:#8E8E93; margin-top:1px;">Fica salva só neste aparelho</div>
+          </div>
+          <div style="font-size:15px; color:#007AFF;">{{ photoAction }}</div>
+        </div>
+      </div>
+
+      <div style="padding:12px 20px 42px; background:rgba(245,245,247,0.92); border-top:1px solid #E5E5EA;">
+        <div onClick="{{ saveDoc }}" style="height:52px; border-radius:14px; background:{{ saveBg }}; color:#FFFFFF; font-size:17px; font-weight:600; display:flex; align-items:center; justify-content:center; cursor:pointer;">Salvar</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+    <div style="height:100%; display:flex; flex-direction:column; background:#F5F5F7;">
+      <div style="padding:54px 12px 10px; display:flex; align-items:center; border-bottom:1px solid #E5E5EA;">
+        <div onClick="{{ goList }}" style="min-height:44px; display:flex; align-items:center; gap:2px; padding:0 8px; cursor:pointer; color:#007AFF; font-size:17px;">
+          <span style="font-size:24px; font-weight:300; margin-top:-2px;">‹</span><span>Documentos</span>
+        </div>
+        <div style="flex:1; text-align:center; font-size:17px; font-weight:600; color:#1C1C1E; margin-left:-100px;">Ajustes</div>
+      </div>
+
+      <div style="flex:1; overflow:auto; padding:22px 20px 40px;">
+        <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:0 4px 8px;">Avisar com antecedência</div>
+        <div style="background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06); overflow:hidden;">
+          <sc-for list="{{ alertOptions }}" as="a" hint-placeholder-count="5">
+            <div onClick="{{ a.toggle }}" style="min-height:52px; display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-bottom:1px solid {{ a.border }}; cursor:pointer;">
+              <div style="font-size:16px; color:#1C1C1E;">{{ a.label }}</div>
+              <div style="width:51px; height:31px; border-radius:16px; background:{{ a.trackBg }}; padding:2px; display:flex; justify-content:{{ a.justify }}; transition:background 0.18s;">
+                <div style="width:27px; height:27px; border-radius:14px; background:#FFFFFF; box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:13px; color:#8E8E93; padding:10px 6px 0; line-height:1.45; text-wrap:pretty;">Você recebe um aviso em cada intervalo marcado antes do vencimento — e mais um no dia.</div>
+
+        <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:26px 4px 8px;">Horário dos avisos</div>
+        <div style="background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06); min-height:52px; display:flex; align-items:center; justify-content:space-between; padding:14px 18px;">
+          <div style="font-size:16px; color:#1C1C1E;">Enviar às</div>
+          <div onClick="{{ cycleHour }}" style="min-height:36px; padding:6px 14px; border-radius:9px; background:#F0F0F3; font-size:16px; font-weight:600; color:#1C1C1E; cursor:pointer;">{{ hourLabel }}</div>
+        </div>
+
+        <div style="font-size:12px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#A1A1A6; padding:26px 4px 8px;">Sobre</div>
+        <div style="background:#FFFFFF; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,0.06); overflow:hidden;">
+          <div style="min-height:52px; display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid #F0F0F2;">
+            <div style="font-size:16px; color:#1C1C1E;">Documentos salvos</div>
+            <div style="font-size:16px; color:#8E8E93;">{{ docCount }}</div>
+          </div>
+          <div style="min-height:52px; display:flex; align-items:center; justify-content:space-between; padding:14px 18px;">
+            <div style="font-size:16px; color:#1C1C1E;">Dados</div>
+            <div style="font-size:16px; color:#8E8E93;">Só neste aparelho</div>
+          </div>
+        </div>
+        <div style="font-size:13px; color:#8E8E93; padding:10px 6px 0; line-height:1.45; text-wrap:pretty;">Sem conta, sem nuvem, sem sincronização. Nada sai do seu iPhone.</div>
+      </div>
+    </div>
+  </sc-if>
+
+</x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:482,&quot;height&quot;:954}}">
+const CATS = {
+  viagem:  { label: 'Viagem',  paths: ['M12 3a9 9 0 100 18 9 9 0 000-18', 'M3.2 12h17.6', 'M12 3c2.6 2.7 2.6 15.3 0 18', 'M12 3c-2.6 2.7-2.6 15.3 0 18'] },
+  pessoal: { label: 'Pessoal', paths: ['M12 11.2a3.6 3.6 0 100-7.2 3.6 3.6 0 000 7.2', 'M4.8 20c0-3.4 3.2-5.6 7.2-5.6s7.2 2.2 7.2 5.6'] },
+  trabalho:{ label: 'Trabalho', paths: ['M3.6 8.4h16.8v10.8H3.6z', 'M9 8.4V6.2h6v2.2', 'M3.6 13.2h16.8'] },
+  saude:   { label: 'Saúde',   paths: ['M12 5.4v13.2', 'M5.4 12h13.2'] },
+  veiculo: { label: 'Veículo', paths: ['M4 15.2l1.7-5.1A2.2 2.2 0 017.8 8.6h8.4a2.2 2.2 0 012.1 1.5l1.7 5.1v3.6h-2.6v-2H6.6v2H4z', 'M7.2 15.2h1.6', 'M15.2 15.2h1.6'] },
+};
+const DAY = 86400000;
+const MONTHS = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const MON3 = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const RED = '#C93A2C', ORANGE = '#C87A12', NEUTRAL = '#C7C7CC';
+
+function startOfToday() { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function parse(s) { const p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+function offsetIso(days) { const t = startOfToday(); return iso(new Date(t.getTime() + days * DAY)); }
+
+class Component extends DCLogic {
+  state = {
+    screen: 'list',
+    currentId: 2,
+    editingId: null,
+    form: null,
+    calMonth: null,
+    hourIdx: 1,
+    alerts: { 90: true, 30: true, 7: true, 1: false },
+    docs: [
+      { id: 1, name: 'CNH',                         cat: 'veiculo',  due: offsetIso(-21), photo: false },
+      { id: 2, name: 'Passaporte',                  cat: 'viagem',   due: offsetIso(18),  photo: true },
+      { id: 3, name: 'RG do meu pai (Antônio)',     cat: 'pessoal',  due: offsetIso(26),  photo: false },
+      { id: 4, name: 'Seguro do carro',             cat: 'veiculo',  due: offsetIso(34),  photo: false },
+      { id: 5, name: 'Carteirinha do plano',        cat: 'saude',    due: offsetIso(120), photo: false },
+      { id: 6, name: 'Certificado NR-10',           cat: 'trabalho', due: offsetIso(166), photo: false },
+      { id: 7, name: 'Visto EUA (B1/B2)',           cat: 'viagem',   due: offsetIso(950), photo: true },
+    ],
+  };
+
+  icon(cat, color, size) {
+    const c = CATS[cat] || CATS.pessoal;
+    return React.createElement('svg', {
+      width: size || 17, height: size || 17, viewBox: '0 0 24 24', fill: 'none',
+      stroke: color || '#8E8E93', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round',
+    }, c.paths.map((d, i) => React.createElement('path', { key: i, d })));
+  }
+
+  decorate(doc) {
+    const days = Math.round((parse(doc.due) - startOfToday()) / DAY);
+    const overdue = days < 0, soon = days >= 0 && days <= 30;
+    const color = overdue ? RED : soon ? ORANGE : NEUTRAL;
+    const d = parse(doc.due);
+    return Object.assign({}, doc, {
+      days, color,
+      icon: this.icon(doc.cat),
+      categoryLabel: (CATS[doc.cat] || {}).label,
+      dateLabel: d.getDate() + ' ' + MON3[d.getMonth()] + ' ' + d.getFullYear(),
+      longDate: d.getDate() + ' de ' + MONTHS[d.getMonth()] + ' de ' + d.getFullYear(),
+      statusLabel: overdue
+        ? (days === -1 ? 'Venceu ontem' : 'Venceu há ' + (-days) + ' dias')
+        : days === 0 ? 'Vence hoje'
+        : days === 1 ? 'Amanhã'
+        : soon ? 'Em ' + days + ' dias'
+        : days < 365 ? 'Em ' + Math.round(days / 30) + ' meses'
+        : 'Em ' + Math.floor(days / 365) + (days < 730 ? ' ano' : ' anos'),
+      bigNumber: overdue ? String(-days) : String(days),
+      bigCaption: overdue
+        ? (days === -1 ? 'dia desde o vencimento' : 'dias desde o vencimento')
+        : days === 0 ? 'vence hoje' : days === 1 ? 'dia até o vencimento' : 'dias até o vencimento',
+      photo: doc.photo,
+      open: () => this.setState({ screen: 'detail', currentId: doc.id }),
+    });
+  }
+
+  emptyForm() { return { name: '', cat: 'pessoal', due: offsetIso(30), photo: false }; }
+
+  openForm(doc) {
+    const form = doc ? { name: doc.name, cat: doc.cat, due: doc.due, photo: doc.photo } : this.emptyForm();
+    const d = parse(form.due);
+    this.setState({ screen: 'form', form, editingId: doc ? doc.id : null, calMonth: iso(new Date(d.getFullYear(), d.getMonth(), 1)) });
+  }
+
+  setField(k, v) { this.setState(s => ({ form: Object.assign({}, s.form, { [k]: v }) })); }
+
+  shiftMonth(n) {
+    this.setState(s => {
+      const c = parse(s.calMonth);
+      return { calMonth: iso(new Date(c.getFullYear(), c.getMonth() + n, 1)) };
+    });
+  }
+
+  save() {
+    const f = this.state.form;
+    if (!f.name.trim()) return;
+    this.setState(s => {
+      if (s.editingId) {
+        return { docs: s.docs.map(d => d.id === s.editingId ? Object.assign({}, d, { name: f.name.trim(), cat: f.cat, due: f.due, photo: f.photo }) : d), screen: 'detail', currentId: s.editingId };
+      }
+      const id = Math.max.apply(null, s.docs.map(d => d.id)) + 1;
+      return { docs: s.docs.concat([{ id, name: f.name.trim(), cat: f.cat, due: f.due, photo: f.photo }]), screen: 'detail', currentId: id };
+    });
+  }
+
+  calendar() {
+    const c = parse(this.state.calMonth);
+    const first = new Date(c.getFullYear(), c.getMonth(), 1);
+    const lead = first.getDay();
+    const total = new Date(c.getFullYear(), c.getMonth() + 1, 0).getDate();
+    const today = iso(startOfToday());
+    const out = [];
+    for (let i = 0; i < lead; i++) out.push({ label: '', bg: 'transparent', fg: 'transparent', weight: 400, cursor: 'default', select: () => {} });
+    for (let n = 1; n <= total; n++) {
+      const dIso = iso(new Date(c.getFullYear(), c.getMonth(), n));
+      const sel = dIso === this.state.form.due;
+      out.push({
+        label: String(n),
+        bg: sel ? '#1C1C1E' : 'transparent',
+        fg: sel ? '#FFFFFF' : dIso === today ? '#007AFF' : '#1C1C1E',
+        weight: sel || dIso === today ? 600 : 400,
+        cursor: 'pointer',
+        select: () => this.setField('due', dIso),
+      });
+    }
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const all = s.docs.map(d => this.decorate(d)).sort((a, b) => a.days - b.days);
+    const overdue = all.filter(d => d.days < 0);
+    const soon = all.filter(d => d.days >= 0 && d.days <= 30);
+    const ok = all.filter(d => d.days > 30);
+    const attention = overdue.length + soon.length;
+    const cur = all.filter(d => d.id === s.currentId)[0] || all[0];
+    const activeAlerts = [90, 30, 7, 1].filter(n => s.alerts[n]);
+    const hours = ['08:00', '09:00', '12:00', '19:00'];
+
+    const vals = {
+      isList: s.screen === 'list', isDetail: s.screen === 'detail',
+      isForm: s.screen === 'form', isSettings: s.screen === 'settings',
+      overdue, soon, ok, cur,
+      hasOverdue: overdue.length > 0, hasSoon: soon.length > 0, hasOk: ok.length > 0,
+      summary: attention === 0
+        ? 'Tudo em dia — nada a fazer agora'
+        : attention === 1 ? '1 documento precisa de atenção' : attention + ' documentos precisam de atenção',
+      gearIcon: this.icon('saude', '#6E6E73', 0) && React.createElement('svg', { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: '#6E6E73', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' },
+        React.createElement('circle', { key: 'c', cx: 12, cy: 12, r: 3.2 }),
+        React.createElement('path', { key: 'p', d: 'M12 3.2v2M12 18.8v2M3.2 12h2M18.8 12h2M5.8 5.8l1.5 1.5M16.7 16.7l1.5 1.5M18.2 5.8l-1.5 1.5M7.3 16.7l-1.5 1.5' })),
+      cameraIcon: React.createElement('svg', { width: 21, height: 21, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' },
+        React.createElement('path', { key: 'p', d: 'M3.6 8.8h3.2l1.4-2.2h7.6l1.4 2.2h3.2v9.6H3.6z' }),
+        React.createElement('circle', { key: 'c', cx: 12, cy: 13.4, r: 3.1 })),
+      goSettings: () => this.setState({ screen: 'settings' }),
+      goList: () => this.setState({ screen: 'list' }),
+      goAdd: () => this.openForm(null),
+      goEdit: () => this.openForm(s.docs.filter(d => d.id === s.currentId)[0]),
+      removeDoc: () => this.setState(st => ({ docs: st.docs.filter(d => d.id !== st.currentId), screen: 'list' })),
+      cancelForm: () => this.setState({ screen: s.editingId ? 'detail' : 'list' }),
+      saveDoc: () => this.save(),
+      formTitle: s.editingId ? 'Editar' : 'Novo documento',
+      alertsLabel: activeAlerts.length ? activeAlerts.join(', ') + ' dias antes' : 'Desativados',
+      docCount: String(s.docs.length),
+      hourLabel: hours[s.hourIdx],
+      cycleHour: () => this.setState(st => ({ hourIdx: (st.hourIdx + 1) % hours.length })),
+      alertOptions: [90, 30, 7, 1].map((n, i) => ({
+        label: n === 1 ? '1 dia antes' : n + ' dias antes',
+        trackBg: s.alerts[n] ? '#1C1C1E' : '#E1E1E5',
+        justify: s.alerts[n] ? 'flex-end' : 'flex-start',
+        border: i === 3 ? 'transparent' : '#F0F0F2',
+        toggle: () => this.setState(st => ({ alerts: Object.assign({}, st.alerts, { [n]: !st.alerts[n] }) })),
+      })),
+      weekdays: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+    };
+
+    if (s.form) {
+      const cm = parse(s.calMonth), sel = parse(s.form.due);
+      Object.assign(vals, {
+        form: s.form,
+        onName: e => this.setField('name', e.target.value),
+        categoryChips: Object.keys(CATS).map(k => {
+          const active = s.form.cat === k;
+          return {
+            label: CATS[k].label, bg: active ? '#1C1C1E' : '#FFFFFF', fg: active ? '#FFFFFF' : '#1C1C1E',
+            icon: this.icon(k, active ? '#FFFFFF' : '#8E8E93'),
+            select: () => this.setField('cat', k),
+          };
+        }),
+        calendarDays: this.calendar(),
+        monthLabel: MONTHS[cm.getMonth()].charAt(0).toUpperCase() + MONTHS[cm.getMonth()].slice(1) + ' ' + cm.getFullYear(),
+        selectedDateLabel: sel.getDate() + ' de ' + MONTHS[sel.getMonth()] + ' de ' + sel.getFullYear(),
+        prevMonth: () => this.shiftMonth(-1),
+        nextMonth: () => this.shiftMonth(1),
+        togglePhoto: () => this.setField('photo', !s.form.photo),
+        photoLabel: s.form.photo ? 'Foto anexada' : 'Adicionar foto',
+        photoAction: s.form.photo ? 'Remover' : 'Escolher',
+        saveBg: s.form.name.trim() ? '#1C1C1E' : '#C7C7CC',
+      });
+    }
+    return vals;
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Table documento {
+  id uuid [pk]
+  nome text [not null]
+  categoria categoria_documento [not null, default: 'pessoal']
+  data_vencimento date [not null]
+  foto bytes
+  criado_em timestamp [not null]
+  atualizado_em timestamp [not null]
+
+  Note: 'Documento pessoal com data de vencimento e aviso agendado. Tabela única, sem chave estrangeira (princípio 0.3 da spec).'
+}
+
+enum categoria_documento {
+  viagem
+  pessoal
+  trabalho
+  saude
+  veiculo
+}
+
+// Configurações (avisos e horário) NÃO são modeladas aqui: vivem em UserDefaults/@AppStorage,
+// por serem escalares sem necessidade de histórico ou consulta (ver seção 7 da spec).
+// Estado de compra (paywall) também não é tabela: é derivado de Transaction.currentEntitlements
+// do StoreKit 2 a cada abertura do app (ver seção 11.6 e seção 13 da spec).

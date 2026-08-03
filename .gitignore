@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Projeto Xcode é derivado do project.yml via `xcodegen generate` (spec 4/18)
+QuandoVence/QuandoVence.xcodeproj/
+
+# Build / DerivedData
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/

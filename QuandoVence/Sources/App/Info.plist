@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Info.plist do app "Quando Vence?".
+  Declara nome de exibição, localização pt-BR e a permissão de Biblioteca de Fotos
+  usada ao anexar a foto de referência do documento (spec 8.3/20). Sem permissão de
+  câmera: a foto é escolhida da galeria (não há captura na hora no MVP). App 100%
+  offline, sem criptografia não isenta (spec 0.1/20).
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Quando Vence?</string>
+	<key>CFBundleName</key>
+	<string>QuandoVence</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>pt-BR</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>pt-BR</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<!-- Nome do conjunto de ícones no asset catalog (exigido pela App Store para
+	     apps com SDK iOS 11+, spec 26). Info.plist é manual (GENERATE_INFOPLIST_FILE:
+	     NO), então a chave é declarada aqui em vez de injetada pelo Xcode. -->
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<!-- App 100% offline, sem criptografia não isenta (spec 0.1/20). -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<!-- Permissão de biblioteca de fotos: escolher a foto de referência do documento (spec 8.3/20). -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para anexar uma foto de referência do documento. Ela fica salva só neste aparelho.</string>
+	<!-- Somente iPhone, sempre retrato (spec 4/17). -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+</dict>
+</plist>
