@@ -1,9 +1,9 @@
 # Spec — Quando Vence? (app de lembrete de vencimento de documentos pessoais)
 
-**Versão do documento:** 1.2
+**Versão do documento:** 1.3
 **Responsável de produto:** Alexandre Siqueira
-**Status:** rascunho
-**Data:** 2026-08-02
+**Status:** implementado — v1.0 (build 1) em revisão na App Store; validação em curso via TestFlight
+**Data:** 2026-08-15
 
 ## Como usar este documento
 
@@ -12,6 +12,8 @@ Este documento é a fonte única de verdade do produto "Quando Vence?" para quem
 **Antes de gerar qualquer código a partir deste spec, revise a seção 24.** Assunção não revisada vira verdade no momento em que o agente de código começa a implementar.
 
 **Referência visual definitiva:** o protótipo gerado no Claude Design (pasta `quando-vence-handoff/`, arquivo `quando-vence/project/Quando Vence.dc.html`) é a fonte de verdade de layout, cor, espaçamento e copy — não a descrição em prosa da seção 16. O agente de código deve ler esse arquivo (e o `README.md` do bundle) por inteiro antes de implementar qualquer tela, e recriar pixel a pixel em SwiftUI — sem copiar a estrutura interna do HTML, só o resultado visual.
+
+**Referência do sistema COMO CONSTRUÍDO (a partir da v1.3):** o app já está implementado (`QuandoVence/`). Para manutenção, a fonte de verdade do comportamento real é `QuandoVence/DOCUMENTACAO-TECNICA.md` (modelo de dados, módulos, mapa tela→dados, lógica por tela e divergências) somada ao código e aos testes (`QuandoVenceTests/` protegem as regras 11.1/11.2 e o agrupamento). Em conflito entre esta spec e o app, valem a doc técnica + o código; atualize esta spec para refletir a realidade em vez de "voltar" o app para a prosa antiga. Toda mudança deve seguir o protocolo incremental da seção 29 e manter os testes verdes.
 
 ---
 
@@ -433,6 +435,8 @@ Sem telemetria embutida no app (coerente com o princípio local-first — instru
 
 *Assunção não revisada vira verdade no minuto em que o agente de código começa a codar — revise antes de gerar código.*
 
+> **Status pós-implementação (v1.3):** todas as assunções abaixo foram confirmadas por Alexandre e já estão implementadas. Mantidas para histórico da decisão.
+
 1. **Limite do paywall: 5 documentos gratuitos**, igual ao Estante. Alternativa considerada: como o protótipo já mostra 7 documentos de exemplo, um limite maior (ex. 7 ou 8) talvez reflita melhor o uso real de alguém com família — mas mantive 5 por consistência com o produto irmão. Se você preferir outro número, é só avisar.
 2. **Preço da compra única confirmado: R$ 19,90**, mesmo valor já praticado nos outros apps (Estante/Hora do Remédio).
 3. **Documento de terceiro fica só no nome** (texto livre), sem campo estruturado de "pessoa" — decisão de manter uma tabela só (princípio 0.3). Se no futuro isso virar dor real (filtrar "documentos do meu pai", por exemplo), é uma extensão simples de v1.1.
@@ -441,35 +445,38 @@ Sem telemetria embutida no app (coerente com o princípio local-first — instru
 6. **Permissão de notificação é pedida no primeiro cadastro de documento**, não no primeiro launch do app — decisão de UX para dar contexto à pessoa antes de pedir a permissão (aumenta taxa de aceite).
 7. **Identificador do produto de IAP confirmado:** `quandovence_desbloqueio_completo`, mesmo padrão de nomenclatura do Estante.
 8. **Tela de Paywall sem referência visual do Claude Design** — o protótipo foi gerado antes da decisão de modelo de negócio, então essa tela não está no handoff. Fica livre para o agente de código desenhar, seguindo só a paleta e tipografia da seção 16 (sem exigência de pixel-perfect contra um mockup, diferente das outras 4 telas).
-9. **Ícone do app está sendo produzido à parte** por Alexandre, fora deste fluxo — não é responsabilidade do agente de código gerar.
+9. **Ícone do app — CONCLUÍDO.** Produzido por Alexandre (`quandovence.png`) e embutido no asset catalog como `AppIcon-1024.png` (1024×1024, opaco, sem canal alpha). Como o Info.plist é manual (`GENERATE_INFOPLIST_FILE: NO`), foi necessário declarar `CFBundleIconName = AppIcon` à mão — sem isso a App Store rejeita o build (ver DOCUMENTACAO-TECNICA, divergência 5). **Não remover essa chave nem o alpha-flatten em builds futuros.**
 
 ---
 
 ## 25. Perguntas abertas
 
-O agente de código deve **perguntar em vez de assumir** ao cruzar com qualquer item abaixo:
+> **Todas RESOLVIDAS na v1.3** (confirmadas por Alexandre e implementadas). Nenhuma pergunta em aberto — não há nada a perguntar antes de manter o app.
 
-1. **Bundle ID e Apple Developer Team** — reaproveitar o prefixo já usado no Estante/Hora do Remédio; precisa do valor exato antes de configurar o projeto Xcode.
-3. **Ícone final do app** — assim como no Estante, não faz parte do protótipo do Claude Design; precisa ser produzido à parte antes da submissão (em andamento, ver seção 24).
+1. **Preço da compra única — RESOLVIDO:** R$ 19,90 (mesmo tier do Estante/Hora do Remédio).
+2. **Bundle ID e Apple Developer Team — RESOLVIDO:** `com.dablab.quandovence`, Team `XGZW6Y6K25`. Product ID do IAP não-consumível: `quandovence_desbloqueio_completo`.
+3. **Ícone final do app — RESOLVIDO:** produzido e embutido (ver seção 24, item 9).
 
 ---
 
 ## 26. Definition of Done
 
-- [ ] Todos os épicos da seção 8 implementados e validados contra seus critérios de aceite.
-- [ ] Telas conferidas visualmente, pixel a pixel, contra `quando-vence-handoff/quando-vence/project/Quando Vence.dc.html` — exceto o Paywall (8.8), que não tem mockup de referência (seção 24, assunção 8) e só precisa seguir a paleta/tipografia da seção 16.
-- [ ] Fluxo de permissão de notificação testado em device real (concedida e negada).
-- [ ] Reagendamento de notificações testado ao editar data, ao mudar toggles de Ajustes e ao mudar horário.
-- [ ] Trial do paywall testado de ponta a ponta em sandbox, incluindo "Restaurar compra" numa instalação diferente com o mesmo Apple ID.
-- [ ] Produto de IAP não-consumível criado e configurado no App Store Connect (identificador `quandovence_desbloqueio_completo`, preço R$ 19,90 — seção 24).
-- [ ] Cálculo de urgência e de rótulo de status (regras 11.1 e 11.2) testado nos casos de borda da seção 22.
-- [ ] Exclusão testada de ponta a ponta: documento some da lista e as notificações associadas somem do sistema.
-- [ ] Modelos de dados (SwiftData) em português conforme seção 7, sem tabela/enum fora do padrão.
-- [ ] Todas as funções e módulos comentados conforme seção 18.
-- [ ] `DOCUMENTACAO-TECNICA.md` gerado e conferido contra o sistema implementado de fato.
-- [ ] Política de privacidade publicada e Privacy Nutrition Label preenchido no App Store Connect (foto de documento de identidade como dado sensível, ver seção 20).
-- [ ] Acessibilidade validada: Dynamic Type, VoiceOver nos cards da lista, contraste AA nas cores de status.
-- [ ] Seção 24 (Assunções) e seção 25 (Perguntas abertas) revisadas e confirmadas por Alexandre antes da submissão à App Store.
+> **Progresso (v1.3):** o desenvolvimento está concluído e validado no Simulador; restam apenas as verificações que exigem device real / sandbox / App Store Connect (marcadas abaixo), agora em curso via TestFlight e revisão da loja.
+
+- [x] Todos os épicos da seção 8 implementados e validados contra seus critérios de aceite.
+- [x] Telas conferidas visualmente, pixel a pixel, contra `quando-vence-handoff/quando-vence/project/Quando Vence.dc.html` — exceto o Paywall (8.8), que não tem mockup de referência (seção 24, assunção 8) e só precisa seguir a paleta/tipografia da seção 16.
+- [ ] Fluxo de permissão de notificação testado em device real (concedida e negada). *(pendente — device/TestFlight)*
+- [ ] Reagendamento de notificações testado ao editar data, ao mudar toggles de Ajustes e ao mudar horário. *(lógica pronta; validar entrega real em device)*
+- [ ] Trial do paywall testado de ponta a ponta em sandbox, incluindo "Restaurar compra" numa instalação diferente com o mesmo Apple ID. *(pendente — sandbox/TestFlight)*
+- [ ] Produto de IAP não-consumível criado e configurado no App Store Connect (identificador `quandovence_desbloqueio_completo`, preço R$ 19,90 — seção 24). *(criar/confirmar no App Store Connect)*
+- [x] Cálculo de urgência e de rótulo de status (regras 11.1 e 11.2) testado nos casos de borda da seção 22. *(testes unitários em `QuandoVenceTests`)*
+- [ ] Exclusão testada de ponta a ponta: documento some da lista e as notificações associadas somem do sistema. *(exclusão validada na UI; conferir remoção no Centro de Notificações em device)*
+- [x] Modelos de dados (SwiftData) em português conforme seção 7, sem tabela/enum fora do padrão.
+- [x] Todas as funções e módulos comentados conforme seção 18.
+- [x] `DOCUMENTACAO-TECNICA.md` gerado e conferido contra o sistema implementado de fato.
+- [ ] Política de privacidade publicada e Privacy Nutrition Label preenchido no App Store Connect (foto de documento de identidade como dado sensível, ver seção 20). *(pendente — App Store Connect)*
+- [~] Acessibilidade: rótulos de VoiceOver nos cards e no número grande, Dynamic Type e cores de status implementados; falta auditar com VoiceOver ligado em device.
+- [x] Seção 24 (Assunções) e seção 25 (Perguntas abertas) revisadas e confirmadas por Alexandre.
 
 ---
 

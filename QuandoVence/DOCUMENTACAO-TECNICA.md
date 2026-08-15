@@ -143,7 +143,7 @@ O preço mostrado no Paywall vem sempre de `displayPrice`, nunca de texto fixo.
 2. **Foto no modelo, não em arquivo.** Seguindo a spec 7 à risca, a foto é `Data?` com `@Attribute(.externalStorage)` no próprio `documento` (diferente do projeto irmão Estante, que guarda o nome do arquivo em disco). Há um helper `FotoUtil` que só redimensiona (≤1200px) e comprime (JPEG ~0.7) antes de gravar.
 3. **Aviso do dia do vencimento para documentos já vencidos.** A regra 11.3 diz "sempre" agendar o aviso do dia exato; na prática, ele só é agendado se o instante ainda for futuro (o SO não permite agendar no passado). Para um documento já vencido, nenhum aviso futuro é criado — comportamento inevitável e coerente com "cuja data resultante ainda esteja no futuro".
 4. **Preço em ambiente de teste.** O preço exibido vem de `product.displayPrice`. Rodando pelo scheme do Xcode (que referencia `QuandoVence.storekit`), aparece **R$ 19,90**; se o app for lançado fora do Xcode sem o arquivo de configuração StoreKit, o preço pode aparecer diferente (artefato de ambiente, não do código).
-5. **`AppIcon` placeholder.** O ícone final é produzido à parte por Alexandre (assunção 9); o asset catalog tem um `AppIcon` vazio, a ser preenchido antes da submissão.
+5. **Ícone do app e `CFBundleIconName`.** O ícone (`AppIcon-1024.png`, 1024×1024, opaco) foi embutido a partir do `quandovence.png` (que era 512×512 com transparência): composto sobre `#1C1C1E` para remover o alpha e escalado para 1024. Como o Info.plist é manual (`GENERATE_INFOPLIST_FILE: NO`), o Xcode **não injeta** `CFBundleIconName` automaticamente — a chave foi declarada à mão no Info.plist (`CFBundleIconName = AppIcon`). Sem ela, a App Store rejeita o build ("Missing Info.plist value CFBundleIconName" + "Missing required icon file 120x120"). **Não remover essa chave, nem reintroduzir alpha no ícone, em builds futuros.**
 
 ---
 
@@ -151,6 +151,8 @@ O preço mostrado no Paywall vem sempre de `displayPrice`, nunca de texto fixo.
 
 - Testar o fluxo de permissão de notificação (concedida e negada) em **device real**.
 - Testar o paywall de ponta a ponta em **sandbox** do StoreKit, incluindo "Restaurar compra" numa instalação nova com o mesmo Apple ID.
-- Criar o produto de IAP não-consumível `quandovence_desbloqueio_completo` (R$ 19,90) no App Store Connect.
+- Criar/confirmar o produto de IAP não-consumível `quandovence_desbloqueio_completo` (R$ 19,90) no App Store Connect.
 - Preencher o Privacy Nutrition Label (foto de documento como dado sensível) e publicar a política de privacidade.
-- Adicionar o ícone final do app.
+- Auditar acessibilidade com VoiceOver ligado em device.
+
+_(Ícone do app: concluído — ver divergência 5.)_
