@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: -apple-system, "SF Pro Text", "SF Pro Display", system-ui, sans-serif; -webkit-font-smoothing: antialiased; background: #F2F2F7; color: #1C1C1E; }
+    a { color: #007AFF; } a:hover { color: #0062cc; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+
+<div style="width: 402px; height: 874px; background: #F2F2F7; position: relative; overflow: hidden;">
+
+  <!-- status bar do sistema: espaço reservado, sem barra falsa -->
+  <div style="height: 59px;"></div>
+
+  <!-- nav bar: só Ajustes à direita (Adicionar fica na base, estilo Lembretes) -->
+  <div style="height: 44px; display: flex; align-items: center; justify-content: flex-end; padding: 0 12px;">
+    <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3.2"/>
+        <path d="M12 3.4v2.1M12 18.5v2.1M3.4 12h2.1M18.5 12h2.1M5.9 5.9l1.5 1.5M16.6 16.6l1.5 1.5M18.1 5.9l-1.5 1.5M7.4 16.6l-1.5 1.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <div style="padding: 4px 20px 8px;">
+    <div style="font-size: 34px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.05;">Quando Vence?</div>
+    <div style="font-size: 15px; color: #8A8A8E; margin-top: 4px;">1 documento precisa de atenção</div>
+  </div>
+
+  <!-- SEÇÃO: Vence em breve (com contador à direita) -->
+  <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 16px 20px 7px;">
+    <div style="font-size: 13px; color: #6D6D72;">Vence em breve</div>
+    <div style="font-size: 13px; color: #A0A0A5;">1</div>
+  </div>
+  <div style="margin: 0 16px; background: #FFFFFF; border-radius: 10px; overflow: hidden;">
+    <div style="display: flex; align-items: center; gap: 14px; padding: 11px 16px; min-height: 56px;">
+      <div style="width: 11px; height: 11px; border-radius: 50%; background: #C87A12; flex: none;"></div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Exame médico do trabalho</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">27 ago 2026</div>
+      </div>
+      <div style="font-size: 15px; color: #C87A12; white-space: nowrap;">Em 4 dias</div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO: Em dia -->
+  <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 22px 20px 7px;">
+    <div style="font-size: 13px; color: #6D6D72;">Em dia</div>
+    <div style="font-size: 13px; color: #A0A0A5;">3</div>
+  </div>
+  <div style="margin: 0 16px; background: #FFFFFF; border-radius: 10px; overflow: hidden;">
+
+    <div style="display: flex; align-items: center; gap: 14px; padding: 11px 16px; min-height: 56px;">
+      <div style="width: 11px; height: 11px; border-radius: 50%; background: #C7C7CC; flex: none;"></div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px;">Passaporte</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">12 jan 2027</div>
+      </div>
+      <div style="font-size: 15px; color: #8A8A8E; white-space: nowrap;">Em 5 meses</div>
+    </div>
+    <div style="height: 0.5px; background: #C6C6C8; margin-left: 41px;"></div>
+
+    <div style="display: flex; align-items: center; gap: 14px; padding: 11px 16px; min-height: 56px;">
+      <div style="width: 11px; height: 11px; border-radius: 50%; background: #C7C7CC; flex: none;"></div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px;">CNH</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">5 abr 2032</div>
+      </div>
+      <div style="font-size: 15px; color: #8A8A8E; white-space: nowrap;">Em 5 anos</div>
+    </div>
+    <div style="height: 0.5px; background: #C6C6C8; margin-left: 41px;"></div>
+
+    <div style="display: flex; align-items: center; gap: 14px; padding: 11px 16px; min-height: 56px;">
+      <div style="width: 11px; height: 11px; border-radius: 50%; background: #C7C7CC; flex: none;"></div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px;">Visto USA</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">26 abr 2033</div>
+      </div>
+      <div style="font-size: 15px; color: #8A8A8E; white-space: nowrap;">Em 6 anos</div>
+    </div>
+
+  </div>
+
+  <!-- barra inferior estilo Lembretes: ação primária fixa embaixo -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 20px 30px; background: rgba(242,242,247,0.94); border-top: 0.5px solid #C6C6C8; display: flex; align-items: center; gap: 12px;">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="14" fill="#007AFF"/>
+      <path d="M14 8v12M8 14h12" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+    <div style="font-size: 17px; font-weight: 600; color: #007AFF;">Adicionar documento</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

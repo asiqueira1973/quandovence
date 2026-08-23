@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: -apple-system, "SF Pro Text", "SF Pro Display", system-ui, sans-serif; -webkit-font-smoothing: antialiased; background: #F2F2F7; color: #1C1C1E; }
+    a { color: #007AFF; } a:hover { color: #0062cc; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+
+<div style="width: 402px; height: 874px; background: #F2F2F7; position: relative; overflow: hidden;">
+
+  <!-- Área da status bar do sistema deixada em branco de propósito (o SO desenha por cima) -->
+  <div style="height: 59px;"></div>
+
+  <!-- Barra de navegação: ações à direita (Ajustes e Adicionar), como em Ajustes/Arquivos -->
+  <div style="height: 44px; display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding: 0 12px;">
+    <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3.2"/>
+        <path d="M12 3.4v2.1M12 18.5v2.1M3.4 12h2.1M18.5 12h2.1M5.9 5.9l1.5 1.5M16.6 16.6l1.5 1.5M18.1 5.9l-1.5 1.5M7.4 16.6l-1.5 1.5"/>
+      </svg>
+    </div>
+    <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2" stroke-linecap="round">
+        <path d="M12 5.5v13M5.5 12h13"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Título grande + resumo (subtítulo secundário, à la App Fitness/Notícias) -->
+  <div style="padding: 4px 20px 8px;">
+    <div style="font-size: 34px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.05;">Quando Vence?</div>
+    <div style="font-size: 15px; color: #8A8A8E; margin-top: 4px;">1 documento precisa de atenção</div>
+  </div>
+
+  <!-- SEÇÃO: Vence em breve -->
+  <div style="font-size: 13px; color: #6D6D72; padding: 16px 20px 7px 32px;">Vence em breve</div>
+  <div style="margin: 0 16px; background: #FFFFFF; border-radius: 10px; overflow: hidden;">
+    <!-- linha -->
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; min-height: 58px;">
+      <div style="width: 29px; height: 29px; border-radius: 7px; background: #E9E9EB; display: flex; align-items: center; justify-content: center; flex: none;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.4v13.2"/><path d="M5.4 12h13.2"/></svg>
+      </div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Exame médico do trabalho</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">27 ago 2026</div>
+      </div>
+      <div style="font-size: 15px; color: #C87A12; white-space: nowrap;">Em 4 dias</div>
+      <svg width="8" height="13" viewBox="0 0 8 13" fill="none" style="flex: none;"><path d="M1.5 1.5 6.5 6.5 1.5 11.5" stroke="#C4C4C6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+
+  <!-- SEÇÃO: Em dia -->
+  <div style="font-size: 13px; color: #6D6D72; padding: 22px 20px 7px 32px;">Em dia</div>
+  <div style="margin: 0 16px; background: #FFFFFF; border-radius: 10px; overflow: hidden;">
+
+    <!-- Passaporte -->
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; min-height: 58px;">
+      <div style="width: 29px; height: 29px; border-radius: 7px; background: #E9E9EB; display: flex; align-items: center; justify-content: center; flex: none;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 100 18 9 9 0 000-18"/><path d="M3.2 12h17.6"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18"/><path d="M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+      </div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px;">Passaporte</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">12 jan 2027</div>
+      </div>
+      <div style="font-size: 15px; color: #8A8A8E; white-space: nowrap;">Em 5 meses</div>
+      <svg width="8" height="13" viewBox="0 0 8 13" fill="none" style="flex: none;"><path d="M1.5 1.5 6.5 6.5 1.5 11.5" stroke="#C4C4C6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div style="height: 0.5px; background: #C6C6C8; margin-left: 57px;"></div>
+
+    <!-- CNH -->
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; min-height: 58px;">
+      <div style="width: 29px; height: 29px; border-radius: 7px; background: #E9E9EB; display: flex; align-items: center; justify-content: center; flex: none;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.2a3.6 3.6 0 100-7.2 3.6 3.6 0 000 7.2"/><path d="M4.8 20c0-3.4 3.2-5.6 7.2-5.6s7.2 2.2 7.2 5.6"/></svg>
+      </div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px;">CNH</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">5 abr 2032</div>
+      </div>
+      <div style="font-size: 15px; color: #8A8A8E; white-space: nowrap;">Em 5 anos</div>
+      <svg width="8" height="13" viewBox="0 0 8 13" fill="none" style="flex: none;"><path d="M1.5 1.5 6.5 6.5 1.5 11.5" stroke="#C4C4C6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div style="height: 0.5px; background: #C6C6C8; margin-left: 57px;"></div>
+
+    <!-- Visto USA -->
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; min-height: 58px;">
+      <div style="width: 29px; height: 29px; border-radius: 7px; background: #E9E9EB; display: flex; align-items: center; justify-content: center; flex: none;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.2a3.6 3.6 0 100-7.2 3.6 3.6 0 000 7.2"/><path d="M4.8 20c0-3.4 3.2-5.6 7.2-5.6s7.2 2.2 7.2 5.6"/></svg>
+      </div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; letter-spacing: -0.2px;">Visto USA</div>
+        <div style="font-size: 14px; color: #8A8A8E; margin-top: 1px;">26 abr 2033</div>
+      </div>
+      <div style="font-size: 15px; color: #8A8A8E; white-space: nowrap;">Em 6 anos</div>
+      <svg width="8" height="13" viewBox="0 0 8 13" fill="none" style="flex: none;"><path d="M1.5 1.5 6.5 6.5 1.5 11.5" stroke="#C4C4C6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 // DetalheView.swift — detalhe de um documento (spec 8.2, regra 11.5).
 //
-// Recria o protótipo: cabeçalho com "‹ Documentos" e "Editar", categoria em
-// destaque na cor de urgência, nome grande, cartão do número grande (dias até/desde
-// o vencimento, regra 11.2) com barra na cor de status, cartão de informações
-// (vencimento por extenso, categoria, avisos ativos) e a foto quando houver
-// (spec 8.2). "Excluir documento" pede confirmação nativa (regra 11.5) e, ao
-// confirmar, cancela as notificações pendentes do documento e volta para a lista
-// (spec 8.2/8.5).
+// Redesenhada no padrão nativo do iOS (/design): categoria em rótulo neutro, nome
+// como título grande, um "herói" central com o countdown (dias até/desde o
+// vencimento — regra 11.2; a cor entra só na urgência, princípio 0.4), os dados em
+// lista agrupada "inset" e "Excluir documento" em seção própria, como o padrão de
+// exclusão do iOS. Sem barra de cor lateral. Excluir pede confirmação nativa
+// (regra 11.5) e, ao confirmar, cancela as notificações pendentes do documento e
+// volta para a lista (spec 8.2/8.5).
 
 import SwiftUI
 import SwiftData
@@ -25,6 +25,12 @@ struct DetalheView: View {
     }
     private var rotuloAvisos: String { ConfiguracaoAvisos().rotuloAvisos }
 
+    // Cor do número grande: só urgência ganha cor; "em dia" fica neutro escuro
+    // (princípio 0.4) — um número gigante em cinza-claro ficaria ilegível.
+    private var corNumero: Color {
+        status.urgencia == .emDia ? Palette.textPrimary : status.cor
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             cabecalho
@@ -33,25 +39,25 @@ struct DetalheView: View {
                     Text(documento.categoria.displayName.uppercased())
                         .font(.system(size: 13, weight: .semibold))
                         .tracking(0.5)
-                        .foregroundStyle(status.cor)
+                        .foregroundStyle(Palette.textMuted)
                     Text(documento.nome)
                         .font(.system(size: 28, weight: .bold))
                         .foregroundStyle(Palette.textPrimary)
-                        .padding(.top, 6)
+                        .padding(.top, 5)
 
                     cartaoNumeroGrande.padding(.top, 20)
-                    cartaoInfo.padding(.top, 14)
+                    cartaoInfo.padding(.top, 26)
                     if let foto = documento.foto, let ui = UIImage(data: foto) {
-                        cartaoFoto(ui).padding(.top, 14)
+                        cartaoFoto(ui).padding(.top, 20)
                     }
-                    botaoExcluir.padding(.top, 26)
+                    botaoExcluir.padding(.top, 24)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 24)
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
                 .padding(.bottom, 40)
             }
         }
-        .background(Palette.screen)
+        .background(Palette.groupedBackground)
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $editando) {
             FormularioView(modo: .editar(documento)) { _ in }
@@ -70,7 +76,7 @@ struct DetalheView: View {
         HStack {
             Button { dismiss() } label: {
                 HStack(spacing: 2) {
-                    Text("‹").font(.system(size: 24, weight: .light))
+                    Image(systemName: "chevron.left").font(.system(size: 18, weight: .medium))
                     Text("Documentos").font(.system(size: 17))
                 }
                 .frame(minHeight: 44)
@@ -84,56 +90,51 @@ struct DetalheView: View {
             }
         }
         .tint(Palette.systemBlue)
-        .padding(.horizontal, 12)
-        .padding(.top, 6)
-        .padding(.bottom, 10)
-        .overlay(alignment: .bottom) { Divider().overlay(Palette.barBorder) }
+        .padding(.horizontal, 8)
+        .padding(.top, 4)
     }
 
-    // Cartão do número grande com a barra de urgência à esquerda (spec 8.2).
+    // Herói central com o countdown (spec 8.2). Número grande, cor só na urgência.
     private var cartaoNumeroGrande: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
+        VStack(spacing: 8) {
             Text(status.bigNumber)
-                .font(.system(size: 44, weight: .bold))
-                .foregroundStyle(Palette.textPrimary)
+                .font(.system(size: 64, weight: .bold))
+                .monospacedDigit()
+                .foregroundStyle(corNumero)
             Text(status.bigCaption)
-                .font(.system(size: 15))
+                .font(.system(size: 16))
                 .foregroundStyle(Palette.textSecondary)
-            Spacer(minLength: 0)
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Palette.card)
-        .overlay(alignment: .leading) { Rectangle().fill(status.cor).frame(width: 4) }
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .shadow(color: .black.opacity(0.06), radius: 7, x: 0, y: 4)
-        .shadow(color: .black.opacity(0.06), radius: 1, x: 0, y: 1)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 26)
+        .groupedCard(cornerRadius: 12)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(status.bigNumber) \(status.bigCaption)")
     }
 
-    // Cartão de informações: vencimento, categoria, avisos (spec 8.2).
+    // Lista agrupada de informações: vencimento, categoria, avisos (spec 8.2).
     private var cartaoInfo: some View {
         VStack(spacing: 0) {
             linhaInfo("Vencimento", Formatters.dataLonga(documento.data_vencimento), divisor: true)
             linhaInfo("Categoria", documento.categoria.displayName, divisor: true)
             linhaInfo("Avisos", rotuloAvisos, divisor: false)
         }
-        .documentoCard()
+        .groupedCard(cornerRadius: 12)
     }
 
     private func linhaInfo(_ rotulo: String, _ valor: String, divisor: Bool) -> some View {
         VStack(spacing: 0) {
             HStack(spacing: 16) {
-                Text(rotulo).font(.system(size: 15)).foregroundStyle(Palette.textSecondary)
+                Text(rotulo).font(.system(size: 16)).foregroundStyle(Palette.textSecondary)
                 Spacer()
-                Text(valor).font(.system(size: 15, weight: .semibold))
+                Text(valor).font(.system(size: 16))
                     .foregroundStyle(Palette.textPrimary)
                     .multilineTextAlignment(.trailing)
             }
-            .padding(.horizontal, 18)
-            .padding(.vertical, 15)
-            if divisor { Divider().overlay(Palette.hairline).padding(.leading, 18) }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 13)
+            .frame(minHeight: 48)
+            if divisor { Divider().overlay(Palette.separator).padding(.leading, 16) }
         }
     }
 
@@ -142,24 +143,22 @@ struct DetalheView: View {
         Image(uiImage: ui)
             .resizable()
             .scaledToFill()
-            .frame(height: 170)
+            .frame(height: 200)
             .frame(maxWidth: .infinity)
             .clipped()
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .shadow(color: .black.opacity(0.06), radius: 1, x: 0, y: 1)
             .accessibilityLabel("Foto do documento")
     }
 
-    // Botão destrutivo (spec 15/16 — cor #C0362B, mais escura que o vermelho de status).
+    // Ação destrutiva em seção própria, como o "Apagar" padrão do iOS (spec 15/16 —
+    // cor #C0362B, mais escura que o vermelho de status).
     private var botaoExcluir: some View {
         Button { confirmandoExclusao = true } label: {
             Text("Excluir documento")
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(size: 17))
                 .foregroundStyle(Palette.destructive)
-                .frame(maxWidth: .infinity, minHeight: 50)
-                .background(Palette.card)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .shadow(color: .black.opacity(0.06), radius: 1, x: 0, y: 1)
+                .frame(maxWidth: .infinity, minHeight: 48)
+                .groupedCard(cornerRadius: 12)
         }
     }
 

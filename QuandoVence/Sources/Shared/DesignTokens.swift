@@ -36,6 +36,11 @@ enum Palette {
     // Neutros semânticos ----------------------------------------------------
     /// Fundo das telas — `#F5F5F7` no claro (spec 16).
     static let screen = Color(light: 0xF5F5F7, dark: 0x000000)
+    /// Fundo agrupado das telas em estilo lista "inset" do iOS (Home/Detalhe
+    /// redesenhados — `systemGroupedBackground` #F2F2F7).
+    static let groupedBackground = Color(light: 0xF2F2F7, dark: 0x000000)
+    /// Separador fino do sistema entre células agrupadas (`separator` #C6C6C8).
+    static let separator = Color(light: 0xC6C6C8, dark: 0x38383A)
     /// Fundo externo/frame — `#E9E9EC` (spec 16).
     static let backdrop = Color(light: 0xE9E9EC, dark: 0x0A0A0A)
     /// Cards — `#FFFFFF` no claro (spec 16).
@@ -89,5 +94,13 @@ extension View {
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .shadow(color: .black.opacity(0.06), radius: 7, x: 0, y: 4)
             .shadow(color: .black.opacity(0.06), radius: 1, x: 0, y: 1)
+    }
+
+    // Cartão de lista agrupada "inset" do iOS: branco, cantos arredondados e SEM
+    // sombra (Home/Detalhe redesenhados no padrão nativo — /design opção B).
+    func groupedCard(cornerRadius: CGFloat = 10) -> some View {
+        self
+            .background(Palette.card)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
 }

@@ -1,12 +1,13 @@
 // ListaView.swift — Home: lista de documentos agrupada por urgência (spec 8.1).
 //
-// Raiz de navegação do app (spec 10). Recria o protótipo pixel a pixel: header
-// grande com título e engrenagem, três seções (Vencidos / Vence em breve / Em dia)
-// só exibidas quando têm itens, resumo no topo, estado vazio, aviso discreto quando
-// as notificações estão desativadas (spec 8.7) e o botão "Adicionar documento"
-// fixo na base (spec 8.1). O botão aplica o gate do paywall no 6º documento
-// (regra 11.6 / spec 8.3/8.8). A nav bar do sistema fica oculta — os cabeçalhos são
-// recriados à mão para bater com o design (spec 16).
+// Raiz de navegação do app (spec 10). Redesenhada no padrão nativo do iOS
+// (/design opção B, "estilo Lembretes"): título grande, seções agrupadas "inset"
+// com contador, cada linha com ponto de urgência à esquerda (regra 11.1), e a ação
+// primária "Adicionar documento" fixa na base no estilo do app Lembretes. Só as
+// seções com itens aparecem; há resumo no topo, estado vazio, aviso discreto quando
+// as notificações estão desativadas (spec 8.7) e o gate do paywall no 6º documento
+// (regra 11.6 / spec 8.3/8.8). A nav bar do sistema fica oculta — o cabeçalho é
+// recriado à mão para o título grande + engrenagem baterem com o design.
 
 import SwiftUI
 import SwiftData
@@ -38,7 +39,7 @@ struct ListaView: View {
                 header
                 conteudo
             }
-            .background(Palette.screen)
+            .background(Palette.groupedBackground)
             .safeAreaInset(edge: .bottom) { rodape }
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: Documento.self) { DetalheView(documento: $0) }
@@ -56,28 +57,31 @@ struct ListaView: View {
         .task { await atualizarStatusNotificacao() }
     }
 
-    // Cabeçalho grande com título, resumo e engrenagem (spec 16).
+    // Cabeçalho: título grande + resumo, com a engrenagem de Ajustes à direita
+    // (padrão de tela com "large title" do iOS).
     private var header: some View {
-        HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 3) {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text("Quando Vence?")
-                    .font(.system(size: 30, weight: .bold))
+                    .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(Palette.textPrimary)
                 Text(grupos.resumo)
-                    .font(.system(size: 14))
+                    .font(.system(size: 15))
                     .foregroundStyle(Palette.textSecondary)
             }
             Spacer()
             Button { path.append(RotaAjustes()) } label: {
-                EngrenagemIconView(size: 22, color: Palette.textSecondary)
+                Image(systemName: "gearshape")
+                    .font(.system(size: 20))
+                    .foregroundStyle(Palette.systemBlue)
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel("Ajustes")
         }
         .padding(.leading, 20)
-        .padding(.trailing, 10)
-        .padding(.top, 8)
-        .padding(.bottom, 12)
+        .padding(.trailing, 8)
+        .padding(.top, 4)
+        .padding(.bottom, 6)
     }
 
     @ViewBuilder
@@ -89,34 +93,43 @@ struct ListaView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     if notificacoesNegadas { avisoNotificacoes }
                     secao("Vencidos", grupos.vencidos, primeira: true)
-                    secao("Vence em breve", grupos.emBreve, primeira: grupos.vencidos.isEmpty && !notificacoesNegadas)
-                    secao("Em dia", grupos.emDia, primeira: grupos.vencidos.isEmpty && grupos.emBreve.isEmpty && !notificacoesNegadas)
+                    secao("Vence em breve", grupos.emBreve, primeira: grupos.vencidos.isEmpty)
+                    secao("Em dia", grupos.emDia, primeira: grupos.vencidos.isEmpty && grupos.emBreve.isEmpty)
                 }
-                .padding(.horizontal, 20)
                 .padding(.bottom, 16)
             }
         }
     }
 
-    // Uma seção só é exibida quando tem itens (spec 8.1). `primeira` reduz o espaço
-    // superior do primeiro rótulo para bater com o protótipo (8px vs 22px).
+    // Uma seção agrupada só é exibida quando tem itens (spec 8.1): cabeçalho com o
+    // nome e o contador à direita, e as linhas dentro de um cartão "inset".
     @ViewBuilder
     private func secao(_ titulo: String, _ docs: [Documento], primeira: Bool) -> some View {
         if !docs.isEmpty {
-            Text(titulo.uppercased())
-                .font(.system(size: 12, weight: .semibold))
-                .tracking(0.6)
-                .foregroundStyle(Palette.sectionLabel)
-                .padding(.top, primeira ? 8 : 22)
-                .padding(.bottom, 8)
-                .padding(.horizontal, 4)
+            HStack(alignment: .firstTextBaseline) {
+                Text(titulo)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Palette.sectionLabel)
+                Spacer()
+                Text("\(docs.count)")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Palette.textMuted)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, primeira ? 12 : 22)
+            .padding(.bottom, 7)
 
-            VStack(spacing: 10) {
-                ForEach(docs) { doc in
-                    Button { path.append(doc) } label: { CartaoDocumento(documento: doc) }
+            VStack(spacing: 0) {
+                ForEach(Array(docs.enumerated()), id: \.element.id) { indice, doc in
+                    Button { path.append(doc) } label: { LinhaDocumento(documento: doc) }
                         .buttonStyle(.plain)
+                    if indice < docs.count - 1 {
+                        Divider().overlay(Palette.separator).padding(.leading, 41)
+                    }
                 }
             }
+            .groupedCard()
+            .padding(.horizontal, 16)
         }
     }
 
@@ -153,31 +166,39 @@ struct ListaView: View {
                 Spacer(minLength: 0)
             }
             .foregroundStyle(Palette.textSecondary)
-            .padding(.vertical, 10)
-            .padding(.top, 8)
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .groupedCard()
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
         }
         .buttonStyle(.plain)
     }
 
-    // Botão primário fixo na base (spec 8.1). Aplica o gate do paywall (regra 11.6).
+    // Ação primária fixa na base, no estilo "Novo lembrete" do app Lembretes
+    // (spec 8.1). Aplica o gate do paywall (regra 11.6).
     private var rodape: some View {
         VStack(spacing: 0) {
-            Divider().overlay(Palette.barBorder)
+            Divider().overlay(Palette.separator)
             Button(action: adicionar) {
-                HStack(spacing: 8) {
-                    Text("+").font(.system(size: 21, weight: .regular))
-                    Text("Adicionar documento").font(.system(size: 17, weight: .semibold))
+                HStack(spacing: 12) {
+                    ZStack {
+                        Circle().fill(Palette.systemBlue).frame(width: 28, height: 28)
+                        Image(systemName: "plus")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    Text("Adicionar documento")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Palette.systemBlue)
+                    Spacer()
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 52)
-                .background(Palette.primaryButton)
-                .foregroundStyle(Palette.primaryButtonText)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 2)
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
         }
-        .background(Palette.screen.opacity(0.92))
+        .background(Palette.groupedBackground.opacity(0.94))
     }
 
     // Abre o formulário de novo documento, ou o Paywall se atingiu o limite

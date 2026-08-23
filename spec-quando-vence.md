@@ -1,8 +1,8 @@
 # Spec — Quando Vence? (app de lembrete de vencimento de documentos pessoais)
 
-**Versão do documento:** 1.3
+**Versão do documento:** 1.4
 **Responsável de produto:** Alexandre Siqueira
-**Status:** implementado — v1.0 (build 1) em revisão na App Store; validação em curso via TestFlight
+**Status:** implementado — v1.0 em revisão na App Store; Home e Detalhe redesenhadas no padrão nativo iOS (pós-v1.0)
 **Data:** 2026-08-15
 
 ## Como usar este documento
@@ -14,6 +14,8 @@ Este documento é a fonte única de verdade do produto "Quando Vence?" para quem
 **Referência visual definitiva:** o protótipo gerado no Claude Design (pasta `quando-vence-handoff/`, arquivo `quando-vence/project/Quando Vence.dc.html`) é a fonte de verdade de layout, cor, espaçamento e copy — não a descrição em prosa da seção 16. O agente de código deve ler esse arquivo (e o `README.md` do bundle) por inteiro antes de implementar qualquer tela, e recriar pixel a pixel em SwiftUI — sem copiar a estrutura interna do HTML, só o resultado visual.
 
 **Referência do sistema COMO CONSTRUÍDO (a partir da v1.3):** o app já está implementado (`QuandoVence/`). Para manutenção, a fonte de verdade do comportamento real é `QuandoVence/DOCUMENTACAO-TECNICA.md` (modelo de dados, módulos, mapa tela→dados, lógica por tela e divergências) somada ao código e aos testes (`QuandoVenceTests/` protegem as regras 11.1/11.2 e o agrupamento). Em conflito entre esta spec e o app, valem a doc técnica + o código; atualize esta spec para refletir a realidade em vez de "voltar" o app para a prosa antiga. Toda mudança deve seguir o protocolo incremental da seção 29 e manter os testes verdes.
+
+**Atenção — Home e Detalhe NÃO seguem mais o protótipo (a partir da v1.4):** as telas **Lista** e **Detalhe** foram redesenhadas no padrão nativo do iOS (listas agrupadas "inset", ponto de urgência, sem barra de cor lateral) — ver DOCUMENTACAO-TECNICA, divergência 5. Só a apresentação mudou; regras, cálculos e fluxos são os mesmos. O protótipo do Claude Design (fonte de verdade da seção 16) ainda governa **Formulário, Ajustes e Paywall**, mas **não** governa Home e Detalhe — não "restaure" essas duas para o protótipo antigo.
 
 ---
 

@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: -apple-system, "SF Pro Text", "SF Pro Display", system-ui, sans-serif; -webkit-font-smoothing: antialiased; background: #F2F2F7; color: #1C1C1E; }
+    a { color: #007AFF; } a:hover { color: #0062cc; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+
+<div style="width: 402px; height: 874px; background: #F2F2F7; position: relative; overflow: hidden;">
+
+  <!-- status bar do sistema: espaço reservado, sem barra falsa -->
+  <div style="height: 59px;"></div>
+
+  <!-- nav bar: voltar + Editar (padrão de tela de detalhe do iOS) -->
+  <div style="height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px;">
+    <div style="display: flex; align-items: center; gap: 2px; color: #007AFF; padding: 0 8px; min-height: 44px;">
+      <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><path d="M10 2 2 10l8 8" stroke="#007AFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-size: 17px;">Documentos</span>
+    </div>
+    <div style="font-size: 17px; color: #007AFF; padding: 0 10px; min-height: 44px; display: flex; align-items: center;">Editar</div>
+  </div>
+
+  <!-- categoria (neutra) + nome como título grande -->
+  <div style="padding: 8px 20px 0;">
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.5px; color: #8A8A8E;">SAÚDE</div>
+    <div style="font-size: 28px; font-weight: 700; letter-spacing: -0.4px; line-height: 1.1; margin-top: 5px; text-wrap: pretty;">Exame médico do trabalho</div>
+  </div>
+
+  <!-- herói do countdown: número grande, cor só na urgência -->
+  <div style="margin: 20px 16px 0; background: #FFFFFF; border-radius: 12px; padding: 26px; text-align: center;">
+    <div style="font-size: 64px; font-weight: 700; letter-spacing: -1.5px; line-height: 1; color: #C87A12;">4</div>
+    <div style="font-size: 16px; color: #8A8A8E; margin-top: 8px;">dias até o vencimento</div>
+  </div>
+
+  <!-- lista agrupada de informações -->
+  <div style="margin: 26px 16px 0; background: #FFFFFF; border-radius: 12px; overflow: hidden;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 16px; min-height: 48px;">
+      <div style="font-size: 16px; color: #8A8A8E;">Vencimento</div>
+      <div style="font-size: 16px; text-align: right;">27 de agosto de 2026</div>
+    </div>
+    <div style="height: 0.5px; background: #C6C6C8; margin-left: 16px;"></div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 16px; min-height: 48px;">
+      <div style="font-size: 16px; color: #8A8A8E;">Categoria</div>
+      <div style="font-size: 16px; text-align: right;">Saúde</div>
+    </div>
+    <div style="height: 0.5px; background: #C6C6C8; margin-left: 16px;"></div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 16px; min-height: 48px;">
+      <div style="font-size: 16px; color: #8A8A8E;">Avisos</div>
+      <div style="font-size: 16px; text-align: right;">90, 30, 7 dias antes</div>
+    </div>
+  </div>
+
+  <!-- ação destrutiva em seção própria (padrão "Apagar" do iOS) -->
+  <div style="margin: 24px 16px 0; background: #FFFFFF; border-radius: 12px; overflow: hidden;">
+    <div style="display: flex; align-items: center; justify-content: center; padding: 13px 16px; min-height: 48px;">
+      <div style="font-size: 17px; color: #C0362B;">Excluir documento</div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

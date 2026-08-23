@@ -1,0 +1,13 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 402, "h": 874, "title": "Home · Opção A (estilo Ajustes)" },
+    { "file": "Lembretes.dc.html", "x": 482, "y": 0, "w": 402, "h": 874, "title": "Home · Opção B (estilo Lembretes)" },
+    { "file": "Detalhe.dc.html", "x": 964, "y": 0, "w": 402, "h": 874, "title": "Detalhe do documento" }
+  ],
+  "annotations": [
+    { "id": "nota-a", "x": 0, "y": -172, "w": 402, "text": "OPÇÃO A — DNA de Ajustes/Arquivos.\nListas agrupadas 'inset', ícone da categoria em quadrado neutro, urgência só na cor do texto à direita. Adicionar e Ajustes na barra de navegação (＋ e engrenagem). Mais sóbrio e 'sistema'.\nTradeoff: a ação Adicionar fica menos proeminente que um botão grande." },
+    { "id": "nota-b", "x": 482, "y": -172, "w": 402, "text": "OPÇÃO B — DNA de Lembretes.\nPonto colorido de urgência à esquerda, contador por seção, e ação Adicionar fixa embaixo (estilo 'Novo lembrete'). Mais escaneável, ação primária destacada.\nTradeoff: a categoria deixa de aparecer como ícone em cada linha." },
+    { "id": "nota-det", "x": 964, "y": -172, "w": 402, "text": "DETALHE — vale para as duas opções.\nO nome vira título grande, o countdown é um herói central (cor só no número), e os dados viram lista agrupada. Excluir fica em seção própria, como o 'Apagar' padrão do iOS. Sem a barra de cor lateral." }
+  ],
+  "launch": { "view": "canvas" }
+}
